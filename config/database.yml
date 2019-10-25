@@ -15,7 +15,7 @@ default: &default
 development:
   <<: *default
   # database: db/development.sqlite3
-  database: spur_development
+  database: news_article_app_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -23,11 +23,11 @@ development:
 test:
   <<: *default
   # database: db/test.sqlite3
-  database: spur_test
+  database: news_article_app_test
 
 production:
   <<: *default
   # database: db/production.sqlite3
-  database: spur_production
-  username: spur
-  password: <%= ENV['SPUR_DATABASE_PASSWORD'] %>
+  database: news_article_app_production
+  username: news_article_app
+  password: <%= ENV['news_article_app_DATABASE_PASSWORD'] %>

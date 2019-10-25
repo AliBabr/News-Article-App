@@ -19,6 +19,7 @@ gem 'figaro'
 # Use pry for debugging purposes
  gem 'pry'
  gem "slim-rails"
+ gem 'rename'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
