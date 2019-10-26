@@ -8,7 +8,11 @@ class Api::V1::UsersController < ApplicationController
     else
       user = User.find_by_email(params[:email])
       if user.present? && user.valid_password?(params[:password])
-        render json: {email: user.email, firt_name: user.first_name, last_name: user.last_name, "X-SPUR-USER-ID" => user.uuid, "Authentication-Token" => user.authentication_token }, :status => 200
+        image_url = ''
+        if user.profile_photo.attached?
+          image_url = url_for(user.profile_photo)
+        end
+        render json: {email: user.email, first_name: user.first_name, last_name: user.last_name, phone: user.phone, street_address: user.street_address, city: user.city, state: user.state, zip_code: user.zip_code, profile_photo: image_url , "X-SPUR-USER-ID" => user.uuid, "Authentication-Token" => user.authentication_token }, :status => 200
       else
         render json: {message: "No Email and Password matching that account were found"}, :status => 400
       end
@@ -18,10 +22,10 @@ class Api::V1::UsersController < ApplicationController
 
   # Method which accepts credential from user and save data in db
   def sign_up
-    user = User.new(user_params)
+    user = User.new(email: params[:email], full_name: params[:full_name], password: params[:password])
     user.uuid=SecureRandom.uuid
     if user.save
-      render json: {email: user.email, firt_name: user.first_name, last_name: user.last_name, "X-SPUR-USER-ID" => user.uuid, "Authentication-Token" => user.authentication_token }, :status => 200
+      render json: {email: user.email, full_name: user.full_name, "X-SPUR-USER-ID" => user.uuid, "Authentication-Token" => user.authentication_token }, :status => 200
     else
       render json: user.errors.messages , :status => 400
     end
@@ -48,7 +52,11 @@ class Api::V1::UsersController < ApplicationController
         if user.errors.any?
           render json: user.errors.messages, :status => 400
         else
-        render json: user.as_json(only: [:first_name, :last_name, :email]), :status => 200
+          image_url = ''
+          if user.profile_photo.attached?
+            image_url = url_for(user.profile_photo)
+          end
+          render json: {email: user.email, first_name: user.first_name, last_name: user.last_name, phone: user.phone, street_address: user.street_address, city: user.city, state: user.state, zip_code: user.zip_code, profile_photo: image_url }, :status => 200
         end
       else
         render json: {message: "Unauthorized!"}, :status => 401
@@ -64,7 +72,7 @@ class Api::V1::UsersController < ApplicationController
       if User.validate_token(request.headers['X-SPUR-USER-ID'],request.headers['Authentication-Token'])
         if params[:current_password].present?
           if user.valid_password?(params[:current_password])
-            user.update(user_params)
+            user.update(password: params[:new_password])
             if user.errors.any?
               render json: user.errors.messages, :status => 400
             else
@@ -130,6 +138,6 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:email, :password, :first_name, :last_name)
+    params.permit(:email, :first_name, :last_name, :phone, :street_address, :city, :state, :zip_code , :profile_photo)
   end
 end
