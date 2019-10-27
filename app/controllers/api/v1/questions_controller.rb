@@ -1,17 +1,27 @@
-class Api::V1::NewsController < ApplicationController
+class Api::V1::QuestionsController < ApplicationController
 
   def create
     message = validate()
     if message == 'true'
-      news = News.new(news_params)
-      if news.save
-        image_url = ''
-        if news.image.attached?
-          image_url = url_for(news.image)
+      answer_options = params[:answer_options].values
+      if params[:correct_option].to_i <= answer_options.length
+        questions = Question.new(question_params)
+        if questions.save
+          answer_options.each do |op|
+            questions.answer_options.create(answer: op)
+          end
+          response = Hash.new{|h,k| h[k]=Hash.new(&h.default_proc) }
+          answers = []
+          questions.answer_options.each do |ans_opt|
+            answers << {option: ans_opt.answer}
+          end
+          response[:question] = {id: questions.id, points: questions.points, correct_option: questions.correct_option, total_days: questions.total_days, options: answers}
+          render json: response , status=> 200
+        else
+          render json: news.errors.messages , :status => 400
         end
-        render json: {title: news.title, website_address: news.website_address, description: news.description, url: news.url, category: news.category, image: image_url }, :status => 200
       else
-        render json: news.errors.messages , :status => 400
+        render json: {message: "Please provide correct value for correct option"}, :status => 401
       end
     else
       message = message.split("_")
@@ -22,15 +32,17 @@ class Api::V1::NewsController < ApplicationController
   def index
     message = validate()
     if message == 'true'
-      newss = []
-      News.all.each do |ne|
-        image_url = ''
-        if ne.image.attached?
-          image_url = url_for(ne.image)
+      response = []
+      all_question = Question.all
+      all_question.each do |q|
+        question_hash = []
+        answer_options = []
+        q.answer_options.each do |ans_opt|
+          answer_options << {option: ans_opt.answer}
         end
-        newss << { title: ne.title , website_address: ne.website_address, description: ne.description, url: ne.url, category: ne.category, image: image_url}
+        response << {id: q.id, question: q.question, days_left: q.total_days, points: q.points, options: answer_options}
       end
-      render json: newss, status => 200
+      render json: response, status => 200
     else
       message = message.split("_")
       render json: {message: message[0]}, :status => message[1].to_i
@@ -77,28 +89,6 @@ class Api::V1::NewsController < ApplicationController
     end
   end
 
-  def search
-    message = validate()
-    if message == 'true'
-      query = params[:query]
-      if query.length < 3
-        render json: {message: "Search query length is short!"}, :status => 404
-      else
-        result = News.search(query)
-        newss = []
-        result.all.each do |ne|
-          image_url = ''
-          if ne.image.attached?
-            image_url = url_for(ne.image)
-          end
-          newss << { title: ne.title , website_address: ne.website_address, description: ne.description, url: ne.url, category: ne.category, image: image_url}
-        end
-        render json: newss, status => 200
-      end
-    else
-      render json: {message: message[0]}, :status => message[1].to_i
-    end
-  end
   private
 
   def validate
@@ -114,8 +104,12 @@ class Api::V1::NewsController < ApplicationController
     end
   end
 
-  def news_params
-    params.permit(:title, :website_address, :description, :url, :category, :image)
+  def question_params
+    params.permit(:question, :points, :correct_option, :total_days)
+  end
+
+  def answer_option_params
+    params.permit(:answer)
   end
 
 end

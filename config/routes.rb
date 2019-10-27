@@ -23,6 +23,7 @@ Rails.application.routes.draw do
           get :search
         end
       end
+      resources :questions
       post '/notifications/toggle_notification', to: 'notifications#toggle_notification'
       resources :places, only: :index
     end
