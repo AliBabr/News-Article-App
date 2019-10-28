@@ -4,7 +4,7 @@ class Api::V1::QuestionsController < ApplicationController
     message = validate()
     if message == 'true'
       answer_options = params[:answer_options].values
-      if params[:correct_option].to_i <= answer_options.length
+      if (params[:correct_option].to_i <= answer_options.length) && (params[:correct_option].to_i > 0)
         questions = Question.new(question_params)
         if questions.save
           answer_options.each do |op|
@@ -15,13 +15,13 @@ class Api::V1::QuestionsController < ApplicationController
           questions.answer_options.each do |ans_opt|
             answers << {option: ans_opt.answer}
           end
-          response[:question] = {id: questions.id, points: questions.points, correct_option: questions.correct_option, total_days: questions.total_days, options: answers}
+          response[:question] = {question_id: questions.id, points: questions.points, correct_option: questions.correct_option, total_days: questions.total_days, options: answers}
           render json: response , status=> 200
         else
-          render json: news.errors.messages , :status => 400
+          render json: questions.errors.messages , :status => 400
         end
       else
-        render json: {message: "Please provide correct value for correct option"}, :status => 401
+        render json: {message: "Please provide valid value for correct option"}, :status => 401
       end
     else
       message = message.split("_")
@@ -33,14 +33,18 @@ class Api::V1::QuestionsController < ApplicationController
     message = validate()
     if message == 'true'
       response = []
-      all_question = Question.all
-      all_question.each do |q|
+      Question.where(is_active: true).each do |q|
         question_hash = []
         answer_options = []
-        q.answer_options.each do |ans_opt|
-          answer_options << {option: ans_opt.answer}
+        days = q.total_days.to_i - (((Time.now - q.created_at)/60)/1440).to_i
+        if days == 0
+          q.update(is_active: false)
+        else
+          q.answer_options.each_with_index do |ans_opt, index|
+            answer_options << {option_no: index + 1 ,option: ans_opt.answer}
+          end
+          response << {question_id: q.id, question: q.question, days_left: days, points: q.points, options: answer_options}
         end
-        response << {id: q.id, question: q.question, days_left: q.total_days, points: q.points, options: answer_options}
       end
       render json: response, status => 200
     else
@@ -49,23 +53,20 @@ class Api::V1::QuestionsController < ApplicationController
     end
   end
 
-  def update
+  def check_answer
     message = validate()
     if message == 'true'
-      news = News.find_by_id(params[:id])
-      if news.present?
-        news.update(news_params)
-        if news.errors.any?
-          render json: news.errors.messages , :status => 400
+      question = Question.find_by_id(params[:question_id])
+      if question.present? && params[:option_no].present?
+        if question.correct_option == params[:option_no].to_i
+          points = question.points.to_i + @user.points.to_i
+          @user.update(points: points)
+          render json: {message: "Congrates answer is correct!"} , status => 200
         else
-          image_url = ''
-          if news.image.attached?
-            image_url = url_for(news.image)
-          end
-          render json: {title: news.title, website_address: news.website_address, description: news.description, url: news.url, category: news.category, image: image_url }, :status => 200
+          render json: {message: "Answer is not correct please try again!"}, :status => 404
         end
       else
-        render json: {message: "News Not found!"}, :status => 404
+        render json: {message: "Question not found or answer option is empty!"}, :status => 404
       end
     else
       message = message.split("_")
@@ -76,12 +77,12 @@ class Api::V1::QuestionsController < ApplicationController
   def destroy
     message = validate()
     if message == 'true'
-      news = News.find_by_id(params[:id])
-      if news.present?
-        news.destroy
-        render json: {message: "News deleted successfully!"}, :status => 200
+      question = Question.find_by_id(params[:id])
+      if question.present?
+        question.destroy
+        render json: {message: "Question deleted successfully!"}, :status => 200
       else
-        render json: {message: "News Not found!"}, :status => 404
+        render json: {message: "Question Not found!"}, :status => 404
       end
     else
       message = message.split("_")
@@ -92,8 +93,8 @@ class Api::V1::QuestionsController < ApplicationController
   private
 
   def validate
-    user = User.find_by_uuid(request.headers['X-SPUR-USER-ID'])
-    if user.present?
+    @user = User.find_by_uuid(request.headers['X-SPUR-USER-ID'])
+    if @user.present?
       if User.validate_token(request.headers['X-SPUR-USER-ID'],request.headers['Authentication-Token'])
         return "true"
       else
