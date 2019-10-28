@@ -67,7 +67,7 @@ class Api::V1::NewsController < ApplicationController
       news = News.find_by_id(params[:id])
       if news.present?
         news.destroy
-        render json: {message: "News destroyed successfully!"}, :status => 200
+        render json: {message: "News deleted successfully!"}, :status => 200
       else
         render json: {message: "News Not found!"}, :status => 404
       end
