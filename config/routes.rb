@@ -28,6 +28,12 @@ Rails.application.routes.draw do
           put :check_answer
         end
       end
+      resources :rewards do
+        collection do 
+          get :points
+          put :redeem
+        end
+      end
       post '/notifications/toggle_notification', to: 'notifications#toggle_notification'
       resources :places, only: :index
     end

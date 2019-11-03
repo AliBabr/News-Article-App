@@ -13,7 +13,7 @@ class User < ApplicationRecord
   end
 
   # Validate authentication token if exists
-  def self.validate_token(uuid,auth_token)
-    self.find_by_uuid(uuid).authentication_token == auth_token
+  def self.validate_token(id,auth_token)
+    self.find_by_id(id).authentication_token == auth_token
   end
 end
