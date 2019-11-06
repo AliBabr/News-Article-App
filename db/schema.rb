@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_02_232739) do
+ActiveRecord::Schema.define(version: 2019_11_06_212954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,17 @@ ActiveRecord::Schema.define(version: 2019_11_02_232739) do
     t.integer "category"
   end
 
+  create_table "plans", force: :cascade do |t|
+    t.string "name"
+    t.integer "price"
+    t.string "currency"
+    t.string "duration"
+    t.string "plan_tok"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "description"
+  end
+
   create_table "questions", force: :cascade do |t|
     t.string "question"
     t.integer "points"
@@ -75,6 +86,16 @@ ActiveRecord::Schema.define(version: 2019_11_02_232739) do
     t.datetime "updated_at", null: false
     t.string "description"
     t.integer "category"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.string "description"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "user_id"
+    t.bigint "plan_id"
+    t.string "subscription_tok"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
@@ -100,6 +121,7 @@ ActiveRecord::Schema.define(version: 2019_11_02_232739) do
     t.string "role"
     t.integer "login_count"
     t.datetime "login_time"
+    t.string "stripe_cutomer_id"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
