@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   # devise_for :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
@@ -13,6 +15,7 @@ Rails.application.routes.draw do
           post :forgot_password
           post :reset_password
           post :toggle_notification
+          post :save_stripe_token
         end
         member do
           get :reset
@@ -29,16 +32,23 @@ Rails.application.routes.draw do
         end
       end
       resources :rewards do
-        collection do 
+        collection do
           get :points
           put :redeem
         end
       end
+      resources :plans, only: %i[create update destroy]
+      resources :subscriptions, only: [:create] do
+        collection do
+          put :cancel_subscription
+        end
+      end
+
       post '/notifications/toggle_notification', to: 'notifications#toggle_notification'
       resources :places, only: :index
+      mount StripeEvent::Engine, at: '/payment.events.com'
     end
   end
 
-  root to: "home#index"
-
+  root to: 'home#index'
 end

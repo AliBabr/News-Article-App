@@ -1,6 +1,6 @@
 
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate, only: %i[update_account update_password log_out] # call back for validating user
+  before_action :authenticate, only: %i[update_account update_password log_out save_stripe_token] # call back for validating user
   before_action :forgot_validation, only: [:forgot_password]
   before_action :before_reset, only: [:reset_password]
 
@@ -96,6 +96,20 @@ class Api::V1::UsersController < ApplicationController
     end
   rescue StandardError => e
     render json: { message: 'Error: Something went wrong... ' }, status: :bad_request
+  end
+
+  # Methode to create customer against stripe card token
+  def save_stripe_token
+    if params[:card_token].present?
+      response = StripePayment.new(@user).create_customer(params[:card_token])
+      if response
+        render json: {message: "Token saved successfully!"}, status: 200
+      else
+        render json: {message: "Invalid Token!"}, status: 401
+      end
+    else
+      render json: {message: "Please provide card token"}
+    end
   end
 
   private

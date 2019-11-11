@@ -11,4 +11,6 @@
 #   stripe_publishable_key: pk_live_9lcthxpSIHbGwmdO941O1XVU
 
 
-GOOGLE_PLACES_KEY: AIzaSyD-2KnDs0lN_0Z293JcYo9pDFF280_819k
+STRIPE_API_KEY: sk_test_OXgdfz0w0U80Ju0B1CBVBk9W
+publishable_key: pk_test_ZNWQ9H8TrCu5RDg3ebtHF2vU
+signing_secret: whsec_VI53kzuhKLJPZR7aLjVZ7MzKgiu80Zyw
