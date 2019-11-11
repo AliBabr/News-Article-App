@@ -21,7 +21,7 @@ class Api::V1::PlansController < ApplicationController
     if @plan.errors.any?
       render json: @plan.errors.messages, status: 400
     else
-      render json: { id: plan.id, name: plan.name, description: plan.description, price: plan.price, currency: plan.currency, duration: plan.duration, plan_tok: plan.plan_tok }, status: 200
+      render json: { id: @plan.id, name: @plan.name, description: @plan.description, price: @plan.price, currency: @plan.currency, duration: @plan.duration, plan_tok: @plan.plan_tok }, status: 200
     end
   rescue StandardError => e # rescu if any exception occure
     render json: { message: 'Error: Something went wrong... ' }, status: :bad_request

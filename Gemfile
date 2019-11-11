@@ -12,15 +12,16 @@ gem 'active_model_serializers', '~> 0.10.0'
 #gem 'sqlite3'
 # Use postgresql as the database for Active Record
 gem 'pg'
-# User google places api 
-gem 'google_places'
+# User google places api
 # use figaro for environment variables
 gem 'figaro'
 # Use pry for debugging purposes
  gem 'pry'
  gem "slim-rails"
  gem 'rename'
- gem 'stripe'
+ gem 'stripe', '~> 5.7.1'
+
+ gem 'excon'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets

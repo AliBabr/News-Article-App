@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 Stripe.api_key = ENV['STRIPE_API_KEY']
 
-class Stripe
+class StripePayment
   def initialize(user)
     @user = user
   end
@@ -39,7 +39,8 @@ class Stripe
 
   def delete_subscription
     subscription = @user.subscriptions.where(status: 'active')
-    Stripe::Subscription.delete(subscription.first.subscription_tok)
+    Stripe::Subscription.delete(subscription.first.subscription_tok) if subscription.present? && subscription.first.subscription_tok.present?
+    subscription.update(subscription_tok: nil)
     return true
   end
 end

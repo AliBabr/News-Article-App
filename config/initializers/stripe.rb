@@ -15,6 +15,7 @@ STRIPE_PUBLIC_KEY = "pk_test_ZNWQ9H8TrCu5RDg3ebtHF2vU"
 #     cvc: '314',
 #   },
 # })
+# tok_1FdhT5CjlvBfqWA4aGDx3ic3
 
 # Stripe.api_key = (ENV['STRIPE_API_KEY'])
 
@@ -48,7 +49,7 @@ STRIPE_PUBLIC_KEY = "pk_test_ZNWQ9H8TrCu5RDg3ebtHF2vU"
 # require 'stripe'
 # Stripe.api_key = 'sk_test_OXgdfz0w0U80Ju0B1CBVBk9W'
 
-# Stripe::Subscription.delete('sub_G8BESiZu9iESLr')
+# Stripe::Subscription.delete('sub_GA1g7aYMUx3rNc')
 
 
 

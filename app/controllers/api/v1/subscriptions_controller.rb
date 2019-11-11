@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class Api::V1::SubcriptionsController < ApplicationController
+class Api::V1::SubscriptionsController < ApplicationController
   before_action :authenticate # call back for validating user
 
   def create
-    if params[:plan_id].present? && Plan.find_by_plan_tok(params[:plan_id]).present?
-      response = Stripe.new(@user).create_subscription(params[:plan_id].to_s)
+    if params[:plan_tok].present? && Plan.find_by_plan_tok(params[:plan_tok]).present?
+      response = StripePayment.new(@user).create_subscription(params[:plan_tok].to_s)
       if response.present?
         save_subscription(response)
       else
@@ -19,7 +19,7 @@ class Api::V1::SubcriptionsController < ApplicationController
 
   # Methode to cancel subscription
   def cancel_subscription
-   response Stripe.new(@user).delete_subscription
+   response =  StripePayment.new(@user).delete_subscription
    if response
      render json: {message: "Your subscription has been cancelled"}, status: 200
    else
@@ -39,7 +39,7 @@ class Api::V1::SubcriptionsController < ApplicationController
     end
     sub = Subscription.new(status: 'active', subscription_tok: subscription.id, description: "New subscription against plan #{params[:plan_id]}")
     sub.user = @user
-    sub.plan = Plan.find_by_plan_tok(params[:plan_id])
+    sub.plan = Plan.find_by_plan_tok(params[:plan_tok])
     if sub.save
       render json: {message: "You subscribed successfully!"}, status: 200
     else

@@ -101,7 +101,7 @@ class Api::V1::UsersController < ApplicationController
   # Methode to create customer against stripe card token
   def save_stripe_token
     if params[:card_token].present?
-      response = Stripe.new(@user).create_customer(params[:card_token])
+      response = StripePayment.new(@user).create_customer(params[:card_token])
       if response
         render json: {message: "Token saved successfully!"}, status: 200
       else
