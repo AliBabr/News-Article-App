@@ -20,6 +20,7 @@ gem 'figaro'
  gem "slim-rails"
  gem 'rename'
  gem 'stripe', '~> 5.7.1'
+ gem 'stripe_event'
 
  gem 'excon'
 # Use Puma as the app server

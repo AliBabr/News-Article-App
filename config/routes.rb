@@ -46,6 +46,7 @@ Rails.application.routes.draw do
 
       post '/notifications/toggle_notification', to: 'notifications#toggle_notification'
       resources :places, only: :index
+      mount StripeEvent::Engine, at: '/payment.events.com'
     end
   end
 

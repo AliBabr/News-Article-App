@@ -12,3 +12,5 @@
 
 
 STRIPE_API_KEY: sk_test_OXgdfz0w0U80Ju0B1CBVBk9W
+publishable_key: pk_test_ZNWQ9H8TrCu5RDg3ebtHF2vU
+signing_secret: whsec_VI53kzuhKLJPZR7aLjVZ7MzKgiu80Zyw

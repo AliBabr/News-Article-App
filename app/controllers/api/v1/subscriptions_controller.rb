@@ -21,6 +21,7 @@ class Api::V1::SubscriptionsController < ApplicationController
   def cancel_subscription
    response =  StripePayment.new(@user).delete_subscription
    if response
+     CancelSubscriptionMailer.cancel_subscription(@user).deliver
      render json: {message: "Your subscription has been cancelled"}, status: 200
    else
       render json: {message: "something went wrong.."}, status: :bad_request
@@ -45,5 +46,6 @@ class Api::V1::SubscriptionsController < ApplicationController
     else
       render json: sub.errors.messages, status: 400
     end
+    SubscriptionMailer.subscribe(@user).deliver
   end
 end
