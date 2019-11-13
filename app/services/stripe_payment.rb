@@ -20,6 +20,30 @@ class StripePayment
     end
   end
 
+  def create_plan(params, amount)
+    plan = Stripe::Plan.create({
+      amount: amount,
+      currency: params[:currency],
+      interval: params[:interval],
+      interval_count: params[:interval_count],
+      product: {name: params[:name]},
+    })
+    if plan.id.present?
+      return plan
+    else
+      return nil
+    end
+  end
+
+  def delete_plan(plan_id)
+    plan = Stripe::Plan.delete(plan_id)
+    if plan.id.present?
+      return true
+    else
+      return false
+    end
+  end
+
   def create_subscription(plan_id)
     delete_subscription()
     subscription = Stripe::Subscription.create({
