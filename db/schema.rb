@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_13_212805) do
+ActiveRecord::Schema.define(version: 2019_11_14_183142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,15 @@ ActiveRecord::Schema.define(version: 2019_11_13_212805) do
     t.datetime "updated_at", null: false
     t.bigint "question_id"
     t.index ["question_id"], name: "index_answer_options_on_question_id"
+  end
+
+  create_table "coupons", force: :cascade do |t|
+    t.string "duration"
+    t.integer "percent_off"
+    t.string "token"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "news", force: :cascade do |t|

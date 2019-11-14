@@ -3,7 +3,7 @@
 class Api::V1::PlansController < ApplicationController
   before_action :authenticate # call back for validating user
   before_action :set_plan, only: %i[ delete_plan]
-  before_action :is_admin
+  before_action :is_admin, only: %i[create delete_plan]
 
   def create
     response = StripePayment.new(@user).create_plan(params, params[:amount].to_i*100)
@@ -20,6 +20,15 @@ class Api::V1::PlansController < ApplicationController
     end
   rescue StandardError => e # rescu if any exception occure
     render json: { message: 'Error: Something went wrong... ' }, status: :bad_request
+  end
+
+  def index
+    plan = Plan.all
+    plans = []
+    plan.each do |pl|
+      plans<< {name: pl.name, amount: pl.amount, currency: pl.currency, interval: pl.interval, interval_count: pl.interval_count, description: pl.description}
+    end
+    render json: plans , status: 200
   end
 
   def delete_plan
@@ -57,3 +66,4 @@ class Api::V1::PlansController < ApplicationController
     end
   end
 end
+

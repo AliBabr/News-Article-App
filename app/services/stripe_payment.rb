@@ -44,6 +44,30 @@ class StripePayment
     end
   end
 
+  def create_coupon(params)
+    coupon = Stripe::Coupon.create({
+      duration: params[:duration],
+      id: params[:token],
+      percent_off: params[:percent_off],
+    })
+    if coupon.id.present?
+      return coupon
+    else
+      return false
+    end
+  end
+
+  def delete_coupon(coupon_id)
+    coupon = Stripe::Coupon.delete(
+      coupon_id,
+    )
+    if coupon.id.present?
+      return true
+    else
+      return false
+    end
+  end
+
   def create_subscription(plan_id)
     delete_subscription()
     subscription = Stripe::Subscription.create({
