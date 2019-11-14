@@ -37,7 +37,16 @@ Rails.application.routes.draw do
           put :redeem
         end
       end
-      resources :plans, only: %i[create update destroy]
+      resources :plans, only: %i[create update destroy index] do
+        collection do
+          delete :delete_plan
+        end
+      end
+      resources :coupons, only: %i[create index] do
+        collection do
+          delete :delete_coupon
+        end
+      end
       resources :subscriptions, only: [:create] do
         collection do
           put :cancel_subscription
