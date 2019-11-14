@@ -68,16 +68,14 @@ class StripePayment
     end
   end
 
-  def create_subscription(plan_id)
+  def create_subscription(plan_id, coupon)
     delete_subscription()
     subscription = Stripe::Subscription.create({
       customer: @user.stripe_cutomer_id,
-      items: [
-        {
-          plan: plan_id,
-        },
-      ],
+      items: [{plan: plan_id}],
+      coupon: coupon,
     })
+
     if subscription.id.present?
       return subscription
     else

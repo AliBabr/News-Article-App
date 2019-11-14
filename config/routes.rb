@@ -50,6 +50,9 @@ Rails.application.routes.draw do
       resources :subscriptions, only: [:create] do
         collection do
           put :cancel_subscription
+          put :update_subscription
+          post :upgrade_subscription
+          get :get_subscription
         end
       end
 
