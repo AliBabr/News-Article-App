@@ -11,7 +11,7 @@ class Api::V1::PlansController < ApplicationController
       plan = Plan.new(plan_params)
       plan.id = response.id
       if plan.save
-        render json: { id: plan.id, name: plan.name, description: plan.description, amount: plan.amount, currency: plan.currency, interval: plan.interval, plan_tok: plan.plan_tok }, status: 200
+        render json: { plan_id: plan.id, name: plan.name, description: plan.description, amount: plan.amount, currency: plan.currency, interval: plan.interval }, status: 200
       else
         render json: plan.errors.messages, status: 400
       end
@@ -26,13 +26,13 @@ class Api::V1::PlansController < ApplicationController
     plan = Plan.all
     plans = []
     plan.each do |pl|
-      plans<< {name: pl.name, amount: pl.amount, currency: pl.currency, interval: pl.interval, interval_count: pl.interval_count, description: pl.description}
+      plans<< {plan_id: pl.id, name: pl.name, amount: pl.amount, currency: pl.currency, interval: pl.interval, interval_count: pl.interval_count, description: pl.description}
     end
     render json: plans , status: 200
   end
 
   def delete_plan
-    response = StripePayment.new(@user).delete_plan(params[:id])
+    response = StripePayment.new(@user).delete_plan(params[:plan_id])
     if response.present?
       @plan.destroy
       render json: { message: 'plan deleted successfully!' }, status: 200
@@ -50,7 +50,7 @@ class Api::V1::PlansController < ApplicationController
   end
 
   def set_plan # instance methode for plan
-    @plan = Plan.find_by_id(params[:id])
+    @plan = Plan.find_by_id(params[:plan_id])
     if @plan.present?
       return true
     else
