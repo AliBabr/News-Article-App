@@ -31,6 +31,11 @@ Rails.application.routes.draw do
           put :check_answer
         end
       end
+      resources :polls do
+        collection do
+          put :submit_answer
+        end
+      end
       resources :rewards do
         collection do
           get :points

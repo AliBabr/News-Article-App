@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_14_212805) do
+ActiveRecord::Schema.define(version: 2019_11_15_201725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 2019_11_14_212805) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "question_id"
+    t.integer "votes"
+    t.bigint "poll_id"
     t.index ["question_id"], name: "index_answer_options_on_question_id"
   end
 
@@ -75,15 +77,20 @@ ActiveRecord::Schema.define(version: 2019_11_14_212805) do
     t.integer "interval_count"
   end
 
+  create_table "polls", force: :cascade do |t|
+    t.string "poll_question"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "total_days"
+    t.datetime "result_day"
+  end
+
   create_table "questions", force: :cascade do |t|
     t.string "question"
     t.integer "points"
     t.integer "correct_option"
-    t.string "total_days"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "is_active", default: true
-    t.string "question_type"
   end
 
   create_table "rewards", force: :cascade do |t|
