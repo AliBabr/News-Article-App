@@ -58,7 +58,7 @@ class Api::V1::QuestionsController < ApplicationController
   private
 
   def question_params #permit question parametrs
-    params.permit(:question, :points, :correct_option, :total_days, :question_type)
+    params.permit(:question, :points, :correct_option)
   end
 
   def answer_option_params #permit answer option parameters
@@ -83,7 +83,7 @@ class Api::V1::QuestionsController < ApplicationController
     questions.answer_options.each do |ans_opt|
       answers << { option: ans_opt.answer }
     end
-    response[:question] = { question_id: questions.id, question: questions.question, points: questions.points, correct_option: questions.correct_option, total_days: questions.total_days, options: answers }
+    response[:question] = { question_id: questions.id, question: questions.question, points: questions.points, correct_option: questions.correct_option, options: answers }
     render json: response, status => 200
   end
 
@@ -96,23 +96,16 @@ class Api::V1::QuestionsController < ApplicationController
   end
 
   def get_questions #Helper methode for making response for get question request
-    Question.where(question_type: "DAILY").each do |q|
-      answer_options = []
-      q.answer_options.each_with_index do |ans_opt, index|
-        answer_options << { option_no: index + 1, option: ans_opt.answer }
-      end
-      @response << { question_id: q.id, question: q.question, points: q.points, question_type: q.question_type, options: answer_options }
-    end
-    Question.where(is_active: true, question_type: 'TRIVIA').each do |q|
-      answer_options = []
-      days = q.total_days.to_i - (((Time.now - q.created_at) / 60) / 1440).to_i
-      if days == 0
-        q.update(is_active: false)
+    Question.all.each do |q|
+      days = (((Time.now - q.created_at) / 60) / 1440).to_i
+      if days >= 1
+        q.destroy
       else
+        answer_options = []
         q.answer_options.each_with_index do |ans_opt, index|
           answer_options << { option_no: index + 1, option: ans_opt.answer }
         end
-        @response << { question_id: q.id, question: q.question, question_type: q.question_type, days_left: days, points: q.points, options: answer_options }
+        @response << { question_id: q.id, question: q.question, points: q.points, options: answer_options }
       end
     end
   end
