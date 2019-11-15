@@ -84,7 +84,7 @@ class Api::V1::PollsController < ApplicationController
     if @user.role == 'admin'
       true
     else
-      render json: { message: 'Only admin can create/update/destroy questions!' }
+      render json: { message: 'Only admin can create/update/destroy polls!' }
     end
   end
 

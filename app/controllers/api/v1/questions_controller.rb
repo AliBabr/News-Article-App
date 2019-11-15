@@ -83,7 +83,7 @@ class Api::V1::QuestionsController < ApplicationController
     questions.answer_options.each do |ans_opt|
       answers << { option: ans_opt.answer }
     end
-    response[:question] = { question_id: questions.id, question: questions.question, points: questions.points, correct_option: questions.correct_option, options: answers }
+    response[:question] = { id: questions.id, question: questions.question, points: questions.points, correct_option: questions.correct_option, options: answers }
     render json: response, status => 200
   end
 
@@ -105,7 +105,7 @@ class Api::V1::QuestionsController < ApplicationController
         q.answer_options.each_with_index do |ans_opt, index|
           answer_options << { option_no: index + 1, option: ans_opt.answer }
         end
-        @response << { question_id: q.id, question: q.question, points: q.points, options: answer_options }
+        @response << { id: q.id, question: q.question, points: q.points, options: answer_options }
       end
     end
   end
