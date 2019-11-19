@@ -21,6 +21,7 @@ gem 'figaro'
  gem 'rename'
  gem 'stripe', '~> 5.7.1'
  gem 'stripe_event'
+ gem 'marvel_api'
 
  gem 'excon'
 # Use Puma as the app server
