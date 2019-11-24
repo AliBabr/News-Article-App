@@ -36,7 +36,7 @@ class Api::V1::QuestionsController < ApplicationController
     if params[:option_no].present?
       if @question.correct_option == params[:option_no].to_i
         points = @question.points.to_i + @user.points.to_i; @user.update(points: points)
-        render json: { message: 'Congrates answer is correct!' }, status => 200
+        render json: { message: 'Congrats answer is correct!' }, status => 200
       else
         render json: { message: 'Answer is not correct please try again!' }, status: 404
       end

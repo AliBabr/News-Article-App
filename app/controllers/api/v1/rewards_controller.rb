@@ -60,16 +60,33 @@ class Api::V1::RewardsController < ApplicationController
 
   #Methode to redeem user points
   def redeem
-    category = params[:category].to_i
-    if category.present?
-      status = Redeemption.new(category, @user).redeem
+    if params[:reward_id].present? && Reward.find_by_id(params[:reward_id].to_i).present?
+      reward = Reward.find_by_id(params[:reward_id])
+      status = Redeemption.new(reward.category, @user).redeem
       if status == true
+        RedemptionMailer.call(@user, @user.email, reward,  "").deliver
         render json: { message: 'Your points has been redeemed' }, status => 200
       else
         render json: { message: 'Your points are less for this reward, commplete daily challenges and try again' }, status: 404
       end
     else
-      render json: { message: 'Please provide category' }, status => 401
+      render json: { message: 'Please provide valid reward id' }, status => 401
+    end
+  end
+
+  def ship_to_me_redemption
+    if params[:shipping_address].present? && params[:reward_id].present? && Reward.find_by_id(params[:reward_id].to_i)
+      reward = Reward.find_by_id(params[:reward_id])
+      status = Redeemption.new(reward.category, @user).redeem
+      if status == true
+        RedemptionMailer.call(@user, @user.email, reward,  "").deliver
+        RedemptionMailer.call(@user, "astropowerbox@gmail.com", reward,  params[:shipping_address]).deliver
+        render json: { message: 'Your points has been redeemed' }, status => 200
+      else
+        render json: { message: 'Your points are less for this reward, commplete daily challenges and try again' }, status: 404
+      end
+    else
+      render json: { message: 'Please check something is incorrect or missing all parameters all compulsory' }, status => 401
     end
   end
 
