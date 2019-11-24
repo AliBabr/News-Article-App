@@ -43,6 +43,7 @@ Rails.application.routes.draw do
         collection do
           get :points
           put :redeem
+          put :ship_to_me_redemption
         end
       end
       resources :plans, only: %i[create update destroy index] do
