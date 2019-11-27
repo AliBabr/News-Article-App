@@ -1,0 +1,22 @@
+<h1>Redemption</h1>
+<p>
+  Congratulations redemption done successfully...
+</p>
+
+<p> First Name: <%=@user.first_name%> </p>
+<p> Last Name: <%=@user.last_name%> </p>
+<p> City: <%=@user.city%> </p>
+<p> State: <%=@user.state%> </p>
+<p> Zip code: <%=@user.zip_code%> </p>
+<% if @shipping_address.present? %>
+  <p> Shipping Address: <%=@shipping_address%> </p>
+<%else%>
+  <p> Address: <%=@user.street_address%> </p>
+<%end%>
+
+<h3 > Reward Details </h3>
+<p> Title: <%=@reward.title%> </p>
+<p> Adress: <%=@reward.address%> </p>
+<p> Shop Name: <%=@reward.shop_name%> </p>
+<p> Description: <%=@reward.description%> </p>
+

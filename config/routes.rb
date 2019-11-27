@@ -21,9 +21,12 @@ Rails.application.routes.draw do
           get :reset
         end
       end
-      resources :news do
+      resources :news, only: %i[index] do
         collection do
           get :search
+          get :comic_news
+          get :gaming_news
+          get :get_news_details
         end
       end
       resources :questions do
@@ -40,6 +43,7 @@ Rails.application.routes.draw do
         collection do
           get :points
           put :redeem
+          put :ship_to_me_redemption
         end
       end
       resources :plans, only: %i[create update destroy index] do

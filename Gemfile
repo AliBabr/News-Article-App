@@ -21,6 +21,7 @@ gem 'figaro'
  gem 'rename'
  gem 'stripe', '~> 5.7.1'
  gem 'stripe_event'
+ gem 'marvel_api'
 
 #  Use Fcm to send Push Notifications
  gem 'fcm'

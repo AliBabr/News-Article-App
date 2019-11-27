@@ -14,3 +14,9 @@
 STRIPE_API_KEY: sk_test_OXgdfz0w0U80Ju0B1CBVBk9W
 publishable_key: pk_test_ZNWQ9H8TrCu5RDg3ebtHF2vU
 signing_secret: whsec_VI53kzuhKLJPZR7aLjVZ7MzKgiu80Zyw
+
+MARVEL_PUBLIC_KEY: 9929983d7b63574d0f2bc162a39d879c
+MARVEL_PRIVATE_KEY: 99ee863071ccbd371599d3bad487de72962a5435
+
+x_rapidapi_host: rawg-video-games-database.p.rapidapi.com
+x_rapidapi_key: df17bd36f1msh99579b009101268p104c2ejsnce3900cb22a0
