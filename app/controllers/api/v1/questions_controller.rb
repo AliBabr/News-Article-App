@@ -36,6 +36,7 @@ class Api::V1::QuestionsController < ApplicationController
     if params[:option_no].present?
       if @question.correct_option == params[:option_no].to_i
         points = @question.points.to_i + @user.points.to_i; @user.update(points: points)
+        PushNotification.new(@user.device_token, 'Good News', "Your answer is correct, You have been awarded with #{@question.points.to_i} points").Send_Notification
         render json: { message: 'Congrats answer is correct!' }, status => 200
       else
         render json: { message: 'Answer is not correct please try again!' }, status: 404
@@ -74,7 +75,7 @@ class Api::V1::QuestionsController < ApplicationController
     end
   end
 
-  #Helper methode  for creating questiona and its answer options
+  #Helper method for creating questions and its answer options
   def for_create_question(questions, answer_options)
     answer_options.each do |op|
       questions.answer_options.create(answer: op)
@@ -84,6 +85,7 @@ class Api::V1::QuestionsController < ApplicationController
       answers << { option: ans_opt.answer }
     end
     response[:question] = { id: questions.id, question: questions.question, points: questions.points, correct_option: questions.correct_option, options: answers }
+    PushNotification.new(@user.device_token, 'Quiz', "New quiz is available").Send_Notification
     render json: response, status => 200
   end
 

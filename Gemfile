@@ -23,6 +23,8 @@ gem 'figaro'
  gem 'stripe_event'
  gem 'marvel_api'
 
+#  Use Fcm to send Push Notifications
+ gem 'fcm'
  gem 'excon'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
