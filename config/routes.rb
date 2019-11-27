@@ -11,6 +11,7 @@ Rails.application.routes.draw do
           post :sign_up
           post :log_out
           post :update_password
+          post :save_device_token
           post :update_account
           post :forgot_password
           post :reset_password

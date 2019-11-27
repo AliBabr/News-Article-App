@@ -1,6 +1,6 @@
 
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate, only: %i[update_account update_password log_out save_stripe_token] # call back for validating user
+  before_action :authenticate, only: %i[update_account update_password log_out save_stripe_token save_device_token] # call back for validating user
   before_action :forgot_validation, only: [:forgot_password]
   before_action :before_reset, only: [:reset_password]
 
@@ -21,6 +21,14 @@ class Api::V1::UsersController < ApplicationController
     render json: { message: 'Error: Something went wrong... ' }, status: :bad_request
   end
 
+  def save_device_token
+    if params[:device_token].present?
+      @user.update(device_token: params[:device_token])
+      render json: { message: 'token has been saved...' }, status: 200
+    else
+      render json: { message: "Error: device token can't be blank" }, status: :bad_request
+    end
+  end
 
   # Method which accepts credential from user and save data in db
   def sign_up
