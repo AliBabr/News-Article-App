@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V1::QuestionsController < ApplicationController
-  include PUSHNOTIFICATION
   before_action :authenticate # call back for validating user
   before_action :set_question, only: %i[check_answer destroy]
   before_action :is_admin, only: %i[create update destroy]
@@ -37,7 +36,7 @@ class Api::V1::QuestionsController < ApplicationController
     if params[:option_no].present?
       if @question.correct_option == params[:option_no].to_i
         points = @question.points.to_i + @user.points.to_i; @user.update(points: points)
-        Send_Notification('cD28hYQkI0U:APA91bElWoqZTFgckEV1HKN4PbWrMqRlUnTT-A7XHDvFkCjPRfpPSqfcnH8rALLm5qaJeoMN_nYzqKslIJDBZ9jZOUu-gKWbewBxm4h_h5LJB4j-fc0oGupq4dcoWuSCvwZZtlJfqFiM','Good News', 'Your answer is correct')
+        PushNotification.new(@user.device_token, 'Good News', "Your answer is correct, You have been awarded with #{@question.points.to_i} points").Send_Notification
         render json: { message: 'Congrats answer is correct!' }, status => 200
       else
         render json: { message: 'Answer is not correct please try again!' }, status: 404
@@ -86,7 +85,7 @@ class Api::V1::QuestionsController < ApplicationController
       answers << { option: ans_opt.answer }
     end
     response[:question] = { id: questions.id, question: questions.question, points: questions.points, correct_option: questions.correct_option, options: answers }
-    Send_Notification('cD28hYQkI0U:APA91bElWoqZTFgckEV1HKN4PbWrMqRlUnTT-A7XHDvFkCjPRfpPSqfcnH8rALLm5qaJeoMN_nYzqKslIJDBZ9jZOUu-gKWbewBxm4h_h5LJB4j-fc0oGupq4dcoWuSCvwZZtlJfqFiM','Quiz', 'New quiz is available')
+    PushNotification.new(@user.device_token, 'Quiz', "New quiz is available").Send_Notification
     render json: response, status => 200
   end
 
