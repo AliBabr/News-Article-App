@@ -22,6 +22,8 @@ gem 'figaro'
  gem 'stripe', '~> 5.7.1'
  gem 'stripe_event'
 
+#  Use Fcm to send Push Notifications
+ gem 'fcm'
  gem 'excon'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
