@@ -1,5 +1,5 @@
 class UserMailer < ApplicationMailer
-  default from: "spur@gmail.com"
+  default from: "system@gmail.com"
 
   def forgot_password(user, token)
     @user = user
