@@ -17,6 +17,7 @@ Rails.application.routes.draw do
           post :reset_password
           post :toggle_notification
           post :save_stripe_token
+          get :get_user
         end
         member do
           get :reset
@@ -66,11 +67,11 @@ Rails.application.routes.draw do
         end
       end
 
-      post '/notifications/toggle_notification', to: 'notifications#toggle_notification'
+      post "/notifications/toggle_notification", to: "notifications#toggle_notification"
       resources :places, only: :index
-      mount StripeEvent::Engine, at: '/payment.events.com'
+      mount StripeEvent::Engine, at: "/payment.events.com"
     end
   end
 
-  root to: 'home#index'
+  root to: "home#index"
 end
