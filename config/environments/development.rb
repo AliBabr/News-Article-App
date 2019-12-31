@@ -14,12 +14,12 @@ Rails.application.configure do
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
-  if Rails.root.join('tmp', 'caching-dev.txt').exist?
+  if Rails.root.join("tmp", "caching-dev.txt").exist?
     config.action_controller.perform_caching = true
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      'Cache-Control' => "public, max-age=#{2.days.to_i}"
+      "Cache-Control" => "public, max-age=#{2.days.to_i}",
     }
   else
     config.action_controller.perform_caching = false
@@ -35,20 +35,19 @@ Rails.application.configure do
   # config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
-  # config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-  config.action_mailer.default_url_options = { host: 'https://news-article-system.herokuapp.com' }
+  # config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  config.action_mailer.default_url_options = { host: "https://news-article-system.herokuapp.com" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtp.gmail.com',
-    port:                 25,
-    domain:               'gmail.com',
-    user_name:            'news.article.sysetm@gmail.com',
-    password:             'news12345678',
-    authentication:       'plain'
-    # enable_starttls_auto: true
-    # ^ ^ remove this option ^ ^
+    address: "smtp.gmail.com",
+    port: 25,
+    domain: "gmail.com",
+    user_name: "botsystemss@gmail.com",
+    password: "bot@system123",
+    authentication: "plain",
+  # enable_starttls_auto: true
+  # ^ ^ remove this option ^ ^
   }
-
 
   config.action_mailer.perform_caching = false
 
