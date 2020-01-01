@@ -15,7 +15,7 @@ class Api::V1::PollsController < ApplicationController
       render json: @poll.errors.messages, status: 400
     end
   rescue StandardError => e # rescu if any exception occure
-    render json: { message: 'Error: Something went wrong please check params... ' }, status: :bad_request
+    render json: { message: "Error: Something went wrong please check params... " }, status: :bad_request
   end
 
   # Methode to get all polls and its answers
@@ -24,7 +24,7 @@ class Api::V1::PollsController < ApplicationController
     get_polls
     render json: @response, status => 200
   rescue StandardError => e # rescu if any exception occure
-    render json: { message: 'Error: Something went wrong... ' }, status: :bad_request
+    render json: { message: "Error: Something went wrong... " }, status: :bad_request
   end
 
   # Methode to submit answer
@@ -32,20 +32,20 @@ class Api::V1::PollsController < ApplicationController
     if params[:option_id].present? && AnswerOption.find_by_id(params[:option_id].to_i).present?
       ans_opt = AnswerOption.find_by_id(params[:option_id].to_i)
       ans_opt.update(votes: ans_opt.votes + 1)
-      render json: { message: 'Your answer has been saved!' }, status: 200
+      render json: { message: "Your answer has been saved!" }, status: 200
     else
-      render json: { message: 'Answer option is empty or invalid!' }, status: 404
+      render json: { message: "Answer option is empty or invalid!" }, status: 404
     end
   rescue StandardError => e # rescu if any exception occure
-    render json: { message: 'Error: Something went wrong... ' }, status: :bad_request
+    render json: { message: "Error: Something went wrong... " }, status: :bad_request
   end
 
   # Methode to delete poll
   def destroy
     @poll.destroy
-    render json: { message: 'Poll deleted successfully!' }, status: 200
+    render json: { message: "Poll deleted successfully!" }, status: 200
   rescue StandardError => e # rescu if any exception occure
-    render json: { message: 'Error: Something went wrong... ' }, status: :bad_request
+    render json: { message: "Error: Something went wrong... " }, status: :bad_request
   end
 
   private
@@ -63,7 +63,7 @@ class Api::V1::PollsController < ApplicationController
     if @poll.present?
       return true
     else
-      render json: { message: 'Poll Not found!' }, status: 404
+      render json: { message: "Poll Not found!" }, status: 404
     end
   end
 
@@ -81,10 +81,10 @@ class Api::V1::PollsController < ApplicationController
   end
 
   def is_admin
-    if @user.role == 'admin'
+    if @user.role == "admin"
       true
     else
-      render json: { message: 'Only admin can create/update/destroy polls!' }
+      render json: { message: "Only admin can create/update/destroy polls!" }
     end
   end
 
@@ -92,14 +92,14 @@ class Api::V1::PollsController < ApplicationController
     Poll.all.each do |poll|
       answers = []
       days = poll.total_days.to_i - (((Time.now - poll.created_at) / 60) / 1440).to_i
-      if days == 0
+      if days <= 0
         poll_result(poll, answers, days)
       else
         poll.answer_options.each_with_index do |ans_opt, _index|
           answers << { option_id: ans_opt.id, option: ans_opt.answer, votes: ans_opt.votes }
         end
         total_votes = poll.answer_options.pluck(:votes)
-        @response << { id: poll.id, poll_question: poll.poll_question, days_left: days, status: 'Active', total_votes: total_votes.sum, options: answers }
+        @response << { id: poll.id, poll_question: poll.poll_question, days_left: days, status: "Active", total_votes: total_votes.sum, options: answers }
       end
     end
   end
@@ -112,7 +112,7 @@ class Api::V1::PollsController < ApplicationController
         answers << { option_no: ans_opt.id, option: ans_opt.answer, votes: ans_opt.votes }
       end
       total_votes = poll.answer_options.pluck(:votes)
-      @response << { id: poll.id, poll_question: poll.poll_question, days_left: days, status: 'Result', total_votes: total_votes.sum, options: answers }
+      @response << { id: poll.id, poll_question: poll.poll_question, days_left: days, status: "Result", total_votes: total_votes.sum, options: answers }
     else
       result_days_count = (((Time.now - poll.result_day) / 60) / 1440).to_i
       if result_days_count > 2
@@ -122,7 +122,7 @@ class Api::V1::PollsController < ApplicationController
           answers << { option_id: ans_opt.id, option: ans_opt.answer, votes: ans_opt.votes }
         end
         total_votes = poll.answer_options.pluck(:votes)
-        @response << { id: poll.id, poll_question: poll.poll_question, days_left: days, status: 'Result', total_votes: total_votes.sum, options: answers }
+        @response << { id: poll.id, poll_question: poll.poll_question, days_left: days, status: "Result", total_votes: total_votes.sum, options: answers }
       end
     end
   end
