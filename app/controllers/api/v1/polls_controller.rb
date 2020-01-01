@@ -112,7 +112,7 @@ class Api::V1::PollsController < ApplicationController
         answers << { option_no: ans_opt.id, option: ans_opt.answer, votes: ans_opt.votes }
       end
       total_votes = poll.answer_options.pluck(:votes)
-      @response << { id: poll.id, poll_question: poll.poll_question, days_left: days, status: "Result", total_votes: total_votes.sum, options: answers }
+      @response << { id: poll.id, poll_question: poll.poll_question, status: "Result", total_votes: total_votes.sum, options: answers }
     else
       result_days_count = (((Time.now - poll.result_day) / 60) / 1440).to_i
       if result_days_count > 2
@@ -122,7 +122,7 @@ class Api::V1::PollsController < ApplicationController
           answers << { option_id: ans_opt.id, option: ans_opt.answer, votes: ans_opt.votes }
         end
         total_votes = poll.answer_options.pluck(:votes)
-        @response << { id: poll.id, poll_question: poll.poll_question, days_left: days, status: "Result", total_votes: total_votes.sum, options: answers }
+        @response << { id: poll.id, poll_question: poll.poll_question, status: "Result", total_votes: total_votes.sum, options: answers }
       end
     end
   end
