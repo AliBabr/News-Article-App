@@ -53,6 +53,13 @@ Rails.application.routes.draw do
           delete :delete_plan
         end
       end
+
+      resources :installments, only: %i[create update destroy index] do
+        collection do
+          delete :delete_installment
+        end
+      end
+
       resources :coupons, only: %i[create index] do
         collection do
           delete :delete_coupon
