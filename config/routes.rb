@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :users do
         collection do
           post :sign_in
+          post :web_sign_in
           post :sign_up
           post :log_out
           post :update_password

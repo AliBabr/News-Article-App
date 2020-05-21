@@ -21,6 +21,22 @@ class Api::V1::UsersController < ApplicationController
     render json: { message: "Error: Something went wrong... " }, status: :bad_request
   end
 
+  def web_sign_in
+    if params[:email].blank?
+      render json: { message: "Email can't be blank!" }
+    else
+      user = User.find_by_email(params[:email])
+      if user.present? && user.valid_password?(params[:password])
+        LoginReward.new(user).reward
+        render json: { email: user.email, first_name: user.first_name, last_name: user.last_name, "X_NEWS_ARTICLE_USER_ID" => user.id, "Authentication_Token" => user.authentication_token }, status: 200
+      else
+        render json: { message: "No Email and Password matching that account were found" }, status: 400
+      end
+    end
+  rescue StandardError => e # rescu if any exception occure
+    render json: { message: "Error: Something went wrong... " }, status: :bad_request
+  end
+
   def save_device_token
     if params[:device_token].present?
       @user.update(device_token: params[:device_token])

@@ -9,8 +9,8 @@ class Api::V1::WebController < ApplicationController
     if user.save
       response = StripePayment.new(user).create_customer(params[:card_token])
       if response
-        if params[:plan_id].present? && Plan.find_by_plan_number(params[:plan_id]).present?
-          plan = Plan.find_by_plan_number(params[:plan_id]).id
+        if params[:plan_id].present? && Plan.find_by_plan_number(params[:plan_id].to_i).present?
+          plan = Plan.find_by_plan_number(params[:plan_id].to_i).id
           gift = check_coupon()
           if gift.present?
             if gift == "true"
