@@ -30,7 +30,7 @@ class Api::V1::UsersController < ApplicationController
         LoginReward.new(user).reward
         render json: { email: user.email, first_name: user.first_name, last_name: user.last_name, "X_NEWS_ARTICLE_USER_ID" => user.id, "Authentication_Token" => user.authentication_token }, status: 200
       else
-        render json: { message: "No Email and Password matching that account were found" }, status: 400
+        render json: { message: "No Email and Password matching" }, status: 400
       end
     end
   rescue StandardError => e # rescu if any exception occure
