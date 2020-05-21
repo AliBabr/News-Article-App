@@ -22,7 +22,7 @@ gem 'figaro'
  gem 'stripe', '~> 5.7.1'
  gem 'stripe_event'
  gem 'marvel_api'
-
+gem "rack-cors"
 #  Use Fcm to send Push Notifications
  gem 'fcm'
  gem 'excon'
