@@ -10,8 +10,12 @@
 #   stripe_api_key: sk_live_EeHnL644i6zo4Iyq4v1KdV9H
 #   stripe_publishable_key: pk_live_9lcthxpSIHbGwmdO941O1XVU
 
+# STRIPE_API_KEY: sk_test_OXgdfz0w0U80Ju0B1CBVBk9W
+# publishable_key: pk_test_ZNWQ9H8TrCu5RDg3ebtHF2vU
+
 STRIPE_API_KEY: sk_test_OXgdfz0w0U80Ju0B1CBVBk9W
 publishable_key: pk_test_ZNWQ9H8TrCu5RDg3ebtHF2vU
+
 signing_secret: whsec_VI53kzuhKLJPZR7aLjVZ7MzKgiu80Zyw
 
 MARVEL_PUBLIC_KEY: 9929983d7b63574d0f2bc162a39d879c
