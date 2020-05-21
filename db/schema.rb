@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_14_091457) do
+ActiveRecord::Schema.define(version: 2020_05_21_171602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 2020_01_14_091457) do
     t.datetime "updated_at", null: false
     t.string "description"
     t.integer "interval_count"
+    t.integer "plan_number"
   end
 
   create_table "polls", force: :cascade do |t|
@@ -133,6 +134,8 @@ ActiveRecord::Schema.define(version: 2020_01_14_091457) do
     t.string "zip_code"
     t.bigint "coupon_id"
     t.string "order_no"
+    t.string "country"
+    t.string "apt"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|

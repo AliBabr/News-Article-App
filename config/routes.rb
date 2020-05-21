@@ -65,6 +65,13 @@ Rails.application.routes.draw do
           delete :delete_coupon
         end
       end
+
+      resources :web, only: %i[create index] do
+        collection do
+          post :checkout
+        end
+      end
+
       resources :subscriptions, only: [:create] do
         collection do
           put :cancel_subscription
