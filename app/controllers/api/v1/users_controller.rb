@@ -23,7 +23,7 @@ class Api::V1::UsersController < ApplicationController
 
   def web_sign_in
     if params[:email].blank?
-      render json: { message: "Email can't be blank!" }
+      render json: { message: "Email can't be blank!" }, status: 400
     else
       user = User.find_by_email(params[:email])
       if user.present? && user.valid_password?(params[:password])
