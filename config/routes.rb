@@ -70,6 +70,8 @@ Rails.application.routes.draw do
       resources :web, only: %i[create index] do
         collection do
           post :checkout
+          get :get_subscription
+          post :update_subscription
         end
       end
 

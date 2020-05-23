@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::WebController < ApplicationController
-  # before_action :authenticate # call back for validating user
+  before_action :authenticate, only: %i[get_subscription update_subscription]
 
   def checkout
     errors = []
@@ -74,12 +74,13 @@ class Api::V1::WebController < ApplicationController
   end
 
   def update_subscription
+    @user.update(user_params)
     curr_subs = @user.subscriptions.where(status: "active").first
     curr_subs.update(subscription_params)
     if curr_subs.errors.any?
       render json: @user.errors.messages, status: 400
     else
-      render json: { first_name: curr_subs.first_name, last_name: curr_subs.last_name, street_address: curr_subs.street_address, city: curr_subs.city, state: curr_subs.state, zip_code: curr_subs.zip_code, plan_name: curr_subs.plan.name, plan_amount: curr_subs.plan.amount, plan_description: curr_subs.plan.description }, status: 200
+      render json: { email: @user.email, first_name: curr_subs.first_name, last_name: curr_subs.last_name, street_address: curr_subs.street_address, city: curr_subs.city, state: curr_subs.state, zip_code: curr_subs.zip_code, plan_name: curr_subs.plan.name, plan_amount: curr_subs.plan.amount, plan_description: curr_subs.plan.description }, status: 200
     end
   rescue StandardError => e
     render json: { message: "Error: Something went wrong... " }, status: :bad_request
@@ -87,7 +88,7 @@ class Api::V1::WebController < ApplicationController
 
   def get_subscription
     curr_subs = @user.subscriptions.where(status: "active").first
-    render json: { first_name: curr_subs.first_name, last_name: curr_subs.last_name, street_address: curr_subs.street_address, city: curr_subs.city, state: curr_subs.state, zip_code: curr_subs.zip_code, plan_name: curr_subs.plan.name, plan_amount: curr_subs.plan.amount, plan_description: curr_subs.plan.description }, status: 200
+    render json: { email: @user.email, first_name: curr_subs.first_name, last_name: curr_subs.last_name, street_address: curr_subs.street_address, city: curr_subs.city, state: curr_subs.state, zip_code: curr_subs.zip_code, plan_name: curr_subs.plan.name, plan_amount: curr_subs.plan.amount, plan_description: curr_subs.plan.description, plan_number: curr_subs.plan.plan_number }, status: 200
   rescue StandardError => e
     render json: { message: "Error: Something went wrong... " }, status: :bad_request
   end
@@ -109,6 +110,10 @@ class Api::V1::WebController < ApplicationController
 
   def subscription_params
     params.permit(:first_name, :last_name, :street_address, :city, :state, :zip_code, :country, :apt)
+  end
+
+  def user_params
+    params.permit(:email, :password, :first_name, :last_name, :phone, :street_address, :city, :state, :zip_code, :profile_photo)
   end
 
   # Helper Methode for create subscription
