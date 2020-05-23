@@ -2,9 +2,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery prepend: true
 
   def authenticate
-    @user = User.find_by_id(request.headers["X_NEWS_ARTICLE_USER_ID"])
+    @user = User.find_by_id(request.headers["UUID"])
     if @user.present?
-      if User.validate_token(request.headers["X_NEWS_ARTICLE_USER_ID"], request.headers["Authentication_Token"])
+      if User.validate_token(request.headers["UUID"], request.headers["Authentication"])
         return true
       else
         render json: { message: "Unauthorized!" }, status: 401

@@ -12,7 +12,7 @@ class Api::V1::UsersController < ApplicationController
       user = User.find_by_email(params[:email])
       if user.present? && user.valid_password?(params[:password])
         LoginReward.new(user).reward
-        render json: { email: user.email, first_name: user.first_name, last_name: user.last_name, "X-NEWS-ARTICLE-USER-ID" => user.id, "Authentication-Token" => user.authentication_token }, status: 200
+        render json: { email: user.email, first_name: user.first_name, last_name: user.last_name, "UUID" => user.id, "Authentication" => user.authentication_token }, status: 200
       else
         render json: { message: "No Email and Password matching that account were found" }, status: 400
       end
@@ -28,7 +28,7 @@ class Api::V1::UsersController < ApplicationController
       user = User.find_by_email(params[:email])
       if user.present? && user.valid_password?(params[:password])
         LoginReward.new(user).reward
-        render json: { email: user.email, first_name: user.first_name, last_name: user.last_name, "X_NEWS_ARTICLE_USER_ID" => user.id, "Authentication_Token" => user.authentication_token }, status: 200
+        render json: { email: user.email, first_name: user.first_name, last_name: user.last_name, "UUID" => user.id, "Authentication" => user.authentication_token }, status: 200
       else
         render json: { message: "No Email and Password matching" }, status: 400
       end
