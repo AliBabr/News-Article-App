@@ -80,7 +80,7 @@ class Api::V1::WebController < ApplicationController
     if curr_subs.errors.any?
       render json: @user.errors.messages, status: 400
     else
-      render json: { email: @user.email, first_name: curr_subs.first_name, last_name: curr_subs.last_name, street_address: curr_subs.street_address, city: curr_subs.city, state: curr_subs.state, zip_code: curr_subs.zip_code, plan_name: curr_subs.plan.name, plan_amount: curr_subs.plan.amount, plan_description: curr_subs.plan.description }, status: 200
+      render json: { email: @user.email, first_name: curr_subs.first_name, last_name: curr_subs.last_name, street_address: curr_subs.street_address, city: curr_subs.city, state: curr_subs.state, zip_code: curr_subs.zip_code, plan_name: curr_subs.plan.name, plan_amount: curr_subs.plan.amount, plan_description: curr_subs.plan.description, plan_number: curr_subs.plan.plan_number, apt: curr_subs.apt, country: curr_subs.country }, status: 200
     end
   rescue StandardError => e
     render json: { message: "Error: Something went wrong... " }, status: :bad_request
@@ -88,7 +88,7 @@ class Api::V1::WebController < ApplicationController
 
   def get_subscription
     curr_subs = @user.subscriptions.where(status: "active").first
-    render json: { email: @user.email, first_name: curr_subs.first_name, last_name: curr_subs.last_name, street_address: curr_subs.street_address, city: curr_subs.city, state: curr_subs.state, zip_code: curr_subs.zip_code, plan_name: curr_subs.plan.name, plan_amount: curr_subs.plan.amount, plan_description: curr_subs.plan.description, plan_number: curr_subs.plan.plan_number }, status: 200
+    render json: { email: @user.email, first_name: curr_subs.first_name, last_name: curr_subs.last_name, street_address: curr_subs.street_address, city: curr_subs.city, state: curr_subs.state, zip_code: curr_subs.zip_code, plan_name: curr_subs.plan.name, plan_amount: curr_subs.plan.amount, plan_description: curr_subs.plan.description, plan_number: curr_subs.plan.plan_number, apt: curr_subs.apt, country: curr_subs.country }, status: 200
   rescue StandardError => e
     render json: { message: "Error: Something went wrong... " }, status: :bad_request
   end

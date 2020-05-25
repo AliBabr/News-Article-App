@@ -27,8 +27,12 @@ class Api::V1::UsersController < ApplicationController
     else
       user = User.find_by_email(params[:email])
       if user.present? && user.valid_password?(params[:password])
-        LoginReward.new(user).reward
-        render json: { email: user.email, first_name: user.first_name, last_name: user.last_name, "UUID" => user.id, "Authentication" => user.authentication_token }, status: 200
+        # LoginReward.new(user).reward
+        @user = user
+        curr_subs = @user.subscriptions.where(status: "active").first
+        user_deatails << { email: @user.email, first_name: curr_subs.first_name, last_name: curr_subs.last_name, street_address: curr_subs.street_address, city: curr_subs.city, state: curr_subs.state, zip_code: curr_subs.zip_code, plan_name: curr_subs.plan.name, plan_amount: curr_subs.plan.amount, plan_description: curr_subs.plan.description, plan_number: curr_subs.plan.plan_number, apt: curr_subs.apt, country: curr_subs.country }
+        subscriptions << { email: user.email, first_name: user.first_name, last_name: user.last_name, "UUID" => user.id, "Authentication" => user.authentication_token }
+        render json: { user_deatails: user_deatails, subscriptions: subscriptions }, status: 200
       else
         render json: { message: "No Email and Password matching" }, status: 400
       end
