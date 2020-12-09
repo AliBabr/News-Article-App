@@ -128,7 +128,7 @@ class Api::V1::WebController < ApplicationController
     sub.plan = Plan.find_by_plan_tok(params[:plan_tok])
     sub.coupon = params[:coupon_token] if params[:coupon_token].present? && Coupon.find_by_token(params[:coupon_token]).present?
     if sub.save
-      SubscriptionMailer.subscribe(@user, sub).deliver
+      # SubscriptionMailer.subscribe(@user, sub).deliver
       render json: { user_id: @user.id, token: @user.authentication_token, order_no: sub.order_no, message: "Your subscription has been set up and Power Box is on its way, you will receive an email shortly with your order details...!" }, status: 200
     else
       render json: sub.errors.messages, status: 400
@@ -150,7 +150,7 @@ class Api::V1::WebController < ApplicationController
     else
       render json: sub.errors.messages, status: 400
     end
-    UpgradeSubscriptionMailer.upgrade(@user, sub).deliver
+    # UpgradeSubscriptionMailer.upgrade(@user, sub).deliver
   end
 
   def check_coupon

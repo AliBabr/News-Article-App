@@ -29,6 +29,7 @@ class Api::V1::UsersController < ApplicationController
       if user.present? && user.valid_password?(params[:password])
         # LoginReward.new(user).reward
         @user = user
+        user_deatails = []
         curr_subs = @user.subscriptions.where(status: "active").first
         user_deatails << { email: @user.email, first_name: curr_subs.first_name, last_name: curr_subs.last_name, street_address: curr_subs.street_address, city: curr_subs.city, state: curr_subs.state, zip_code: curr_subs.zip_code, plan_name: curr_subs.plan.name, plan_amount: curr_subs.plan.amount, plan_description: curr_subs.plan.description, plan_number: curr_subs.plan.plan_number, apt: curr_subs.apt, country: curr_subs.country }
         subscriptions << { email: user.email, first_name: user.first_name, last_name: user.last_name, "UUID" => user.id, "Authentication" => user.authentication_token }
@@ -38,7 +39,7 @@ class Api::V1::UsersController < ApplicationController
       end
     end
   rescue StandardError => e # rescu if any exception occure
-    render json: { message: "Error: Something went wrong... " }, status: :bad_request
+    render json: { message: "Error: Something went wrong... #{e}" }, status: :bad_request
   end
 
   def save_device_token
